@@ -110,13 +110,15 @@ window.onload = function() {
   debugger;
   
   console.log(trivia.triaviaLibrary);
-  $(".start").click(function() {
+  $(".container").on("click", ".start", function() {
 
     $(".start").remove();
-    //console.log(trivia.generateRandom());
-    //console.log(trivia.libraryIndex);
     trivia.play();
    
+  });
+
+  $(".container").on("click", ".playAgain", function() {
+    trivia.initialize();
   });
 
   };
@@ -224,6 +226,7 @@ window.onload = function() {
        
         if (buttonContent === correctAnswer) {
           console.log("Yes");
+          trivia.winCount++;
           $(".answer").html("<h4>Correct!</h4>");
           $(".sub_container").empty();
           $(".sub_container").append(celebration);
@@ -236,6 +239,7 @@ window.onload = function() {
 
         } else {
           console.log("Nope");
+          trivia.lossCount++;
           $(".answer").html("<h4>Nope! the correct answer is: " + correctAnswer +"</h4>");
           $(".sub_container").empty();
           $(".sub_container").append(disappointing);
@@ -249,15 +253,17 @@ window.onload = function() {
       },
 
       showFinals: function() {
-        $(".sub-container").empty()
-        $(".sub-container").append("<p class ='summary'>ALL Done, Heres how you did! </p>");
-        $(".sub-container").append("<p class ='summary'>" +"Correct Answer: " + trivia.winCount + "</p>");
-        $(".sub-container").append("<p class ='summary'>" +" incorrect Answer: " + trivia.lossCount + "</p>");
-        $(".sub-container").append("<p class ='summary'>" +"unAnswered: " + trivia.unAnswered + "</p>");
+        $(".container").empty()
+        $(".container").append("<p class ='summary'>ALL Done, Heres how you did! </p>");
+        $(".container").append("<p class ='summary'>" +"Correct Answer: " + trivia.winCount + "</p>");
+        $(".container").append("<p class ='summary'>" +" incorrect Answer: " + trivia.lossCount + "</p>");
+        $(".container").append("<p class ='summary'>" +"unAnswered: " + trivia.unAnswered + "</p>");
+        $(".container").append("<button class ='playAgain'>Play Again?</button>");
 
       },
 
       initialize: function() {
+        
         var gameHeader = $('<div class = "game_header">');
             gameHeader.text("Total Trival Trivia!")
 
@@ -268,70 +274,119 @@ window.onload = function() {
             startButton.text("start");
         
         var subContainer = $('<div class = "sub_container">');
-    
+        
+        $(".container").empty();
         $(".container").append(gameHeader, startTimer, answerDiv,startButton, subContainer);
 
-          var question = $('<div class = "question">');
-          var choices = $('<div class = "choices">');
-
-          subContainer.append(question,choices);
+        trivia.winCount = 0;
+        //Define an LossCount;
+        trivia.lossCount = 0;
+        //Define an variable to store the unanswered;
+        trivia.unAnswered = 0;
+        //Define an array to store the index of answered question
+        trivia.libraryIndex = [];
 
       },
 
       play: function() {
-        var i = 0;
         var i = trivia.generateRandom();
-        var buttonClicked = false;
+        var timeoutID;
+        var triaviaObject;
 
-        //while (trivia.libraryIndex.length < trivia.triaviaLibrary.length) {
-        //for (t = 0; t<7; t++) {
-            trivia.showTrivia(trivia.triaviaLibrary[i]);
-            debugger;
-            //console.log(i);
-            timer.reset();
-            timer.start();
-           //console.log(timer.time);
-            //debugger;
-            // console.log((parseInt(timer.time)>0));
-          //   console.log(!buttonClicked);
-          //   console.log((parseInt(timer.time) > 0 ) && (!buttonClicked));
-          //  while ((parseInt(timer.time) > 0 ) && (!buttonClicked)) {
-                  //timer.start();
-                  console.log(timer.time);
+        //if (trivia.triaviaLibrary.length < 7)  {
+        
+        triaviaObject = trivia.triaviaLibrary[i];
 
-                  $(".button").click(function(){
-                    console.log(this);
-                    timer.stop();
-                    var buttonContent = $(this).text();
-                    console.log (buttonContent);
-                    trivia.showAnswer(trivia.triaviaLibrary[i], buttonContent);
-                    buttonClicked = true;
-                    
-                    
-                  });
-              //}
-           console.log(buttonClicked);
-           debugger;
-           if (buttonClicked) {
-           i = trivia.generateRandom();
-           console.log(i);
-           buttonClicked = false;
-           }
-        //}
+        $(".answer").empty();
+        $(".sub_container").empty();
+        var question = $('<div class = "question">');
+        var choices = $('<div class = "choices">');
 
-        trivia.showFinals();
+        $(".sub_container").append(question,choices);
 
+        trivia.showTrivia(triaviaObject);
+        timer.reset();
+        timer.start();
+
+        $(".button").click(function(){
+          console.log(this);
+          timer.stop();
+          var buttonContent = $(this).text();
+          console.log (buttonContent);
+          trivia.showAnswer(triaviaObject, buttonContent);
+          // console.log(trivia.t)
+          // debugger;
+          if (trivia.libraryIndex.length >= 7)  {
+            clearTimeout(timeoutID);
+            setTimeout((trivia.showFinals), 3000);
+          } else {
+          setTimeout((trivia.play), 3000);
+          clearTimeout(timeoutID);    }                                    
+        });
+        
+        //if (trivia.libraryIndex.length >= 7)  {
+         // trivia.showFinals();
+        //} else {
+        timeoutID = setTimeout(showTimeup, 30000); 
+        //} 
+
+     // } else {trivia.showFinals()}
+
+        function showTimeup() {
+          var correctAnswer =triaviaObject.correctAnswer();
+          trivia.unAnswered++;
+          $(".answer").html("<h4>Time is up! the correct answer is: " + correctAnswer +"</h4>");
+  
+          $(".sub_container").empty();
+          var disappointing = $('<img class = "disappointing">'); 
+          $(".sub_container").append(disappointing);
+          $(".disappointing").attr("src", "assets/gifs/disappointing.gif");
+          $(".disappointing").css("width", "300px");
+          $(".disappointing").css("height","180px");
+          $(".disappointing").css("align-self","center");
+  
+          //setTimeout(trivia.play, 3000);
+
+          if (trivia.libraryIndex.length >= 7)  {
+            
+            setTimeout((trivia.showFinals), 3000);
+          } else {
+            setTimeout((trivia.play), 3000);
+          }    
+  
+        }
+          
       },
 
-      generateRandom: function(x) {
+      showTimeup: function() {
+        //var correctAnswer =o.correctAnswer();
+        //$(".answer").html("<h4>Time is up! the correct answer is: " + correctAnswer +"</h4>");
+        trivia.unAnswered++;
+        $(".sub_container").empty();
+        var disappointing = $('<img class = "disappointing">'); 
+        $(".sub_container").append(disappointing);
+        $(".disappointing").attr("src", "assets/gifs/disappointing.gif");
+        $(".disappointing").css("width", "300px");
+        $(".disappointing").css("height","180px");
+        $(".disappointing").css("align-self","center");
+
+        setTimeout(trivia.play, 3000);
+
+      },
+       
+
+      
+
+      generateRandom: function() {
         var randomNum = Math.floor(Math.random()*7);
 
             while(trivia.libraryIndex.includes(randomNum)) {
                   randomNum = Math.floor(Math.random()*7);
                 }
             trivia.libraryIndex.push(randomNum);
-            console.log(trivia.libraryIndex);    
+            console.log(trivia.libraryIndex);
             return randomNum;
+           
       }
     };
 
