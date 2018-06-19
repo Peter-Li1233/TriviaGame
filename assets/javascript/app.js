@@ -1,109 +1,3 @@
-// //Define an object for each question, including question/choices/method (return the correct answer)
-// var triavia_1 = {question: "what is the only bird known to fly backwards ?", 
-//                         a: "Hummingbird", 
-//                         b: "sparrow", 
-//                         c: "Blue Jay", 
-//                         d: "Mourning Dove", 
-//             correctAnswer: function(){return this.a}
-//                 };
-
-// var triavia_2 = {question: "In China, what number is considered unlucky because its pronunciation is similar to that for the word 'death' ?", 
-//                         a: "8", 
-//                         b: "7", 
-//                         c: "4", 
-//                         d: "10", 
-//             correctAnswer: function(){return this.c}
-//                 };
-// var triavia_3 = {question: "The Martial art of Kung Fu originated in which conuntry ?", 
-//                         a: "India", 
-//                         b: "Korea", 
-//                         c: "Japan", 
-//                         d: "China", 
-//             correctAnswer: function(){return this.d}
-//                 };
-// var triavia_4 = {question: "What NBA player was known as 'The Pearl' ?", 
-//                         a: "James Harden", 
-//                         b: "Earl Monroe", 
-//                         c: "Kobe Brant", 
-//                         d: "Michael Jordan", 
-//             correctAnswer: function(){return this.b}
-//                 };
-// var triavia_5 = {question: "the world's fastest growing plant is a species of what ?", 
-//                         a: "Flowering Plants", 
-//                         b: "Mosses", 
-//                         c: "Grass", 
-//                         d: "Bamboo", 
-//             correctAnswer: function(){return this.d}
-//                 };
-// var triavia_6 = {question: "On the Apollo 11 moon mission, which astronaut stayed aloft in the command module while Neil Armstrong and Buzz Aldrin walked on the moon ?", 
-//                         a: "Peter Li", 
-//                         b: "Donald Trump", 
-//                         c: "Michael Collins", 
-//                         d: "Hillary Clinton", 
-//             correctAnswer: function(){return this.c}
-//                 };
-// var triavia_7 = {question: "When a drink is served 'on the rocks', it is served with what ?", 
-//                         a: "Ice Cubes", 
-//                         b: "Creamy Cheese", 
-//                         c: "Salt", 
-//                         d: "Sugar", 
-//             correctAnswer: function(){return this.a}
-//                 };
-
-//   console.log(triavia_4);
-//   console.log(triavia_4.correctAnswer());
-// //Define an array to store all the object;
-// var triaviaLibrary = [triavia_1,triavia_2,triavia_3,triavia_4,triavia_5,triavia_6,triavia_7];
-// console.log(triaviaLibrary);
-
-// //Define an winCount;
-// var winCount;
-// //Define an LossCount;
-// var lossCount;
-// //Define an variable to store the unanswered;
-// var unAnswered;
-
-
-// //play
-//     //for loop through each item of the array;{}
-//         //Set up an timer and display it on the screen;
-//         // put the question and choices on the screen;
-//             //create an button for each choice
-
-//         //if the timers is up and no choice made {;
-//             // show the time is up;
-//             // show the right answer;
-//             // move onto next question;
-//             // setup timer and display it on the screen;
-//             //Put the question and choices on the screen;
-//         //} else if the choice is made within the time {
-//             // decide whether the choice is correct; (clicked html = object.correctmethod);
-//             //if the choice is correct {
-//                 //stop the timer;
-//                 //display it let the user know it's correct
-//                 //play an celebration video;
-//                 //Go to next question
-//                 //setup timer and display
-//                 //put the question on the screen
-//             //} else if {
-//                 //stop the timer;
-//                 //display it let the user know it's wrong;
-//                 // show the correct answer;
-//                 //play an unfortunate video
-//                 //go to next question
-//                 //.....
-//                 //.....
-//              //}
-
-//         //}
-// //}
-
-// // display the winCount;
-// // display the lossCount
-// // display the unanswered count;
-// // Create an "start over" button
-// // if the user clicked, play again (called the play function)
-
 window.onload = function() {
 
   trivia.initialize();
@@ -281,11 +175,12 @@ window.onload = function() {
 
         //Define an function to show the final result and create an button remainding "play again";
       showFinals: function() {
-          $(".container").empty()
-          $(".container").append("<p class ='summary'>ALL Done, Heres how you did! </p>");
+          $(".container").empty();
+          $(".container").append("<div class = 'game_header'>Total Trival Trivia!");
+          $(".container").append("<p class ='summary_title'>ALL Done, Heres how you did! </p>");
           $(".container").append("<p class ='summary'>" +"Correct Answer: " + trivia.winCount + "</p>");
-          $(".container").append("<p class ='summary'>" +" incorrect Answer: " + trivia.lossCount + "</p>");
-          $(".container").append("<p class ='summary'>" +"unAnswered: " + trivia.unAnswered + "</p>");
+          $(".container").append("<p class ='summary'>" +"Incorrect Answer: " + trivia.lossCount + "</p>");
+          $(".container").append("<p class ='summary'>" +"Non Answered: " + trivia.unAnswered + "</p>");
           $(".container").append("<button class ='playAgain'>Play Again?</button>");
 
       },
@@ -340,7 +235,8 @@ window.onload = function() {
             clearTimeout(timeoutID);    }                                    
           });
           
-          //if (trivia.libraryIndex.length >= 7)  {
+          //if (trivia.libraryIndex.length >= 7)  { "can't be here, otherwise it will do this first while 
+          //waiting for the event above"
           // trivia.showFinals();
           //} else {
           timeoutID = setTimeout(showTimeup, 30000); 
